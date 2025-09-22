@@ -5,3 +5,5 @@ This project is a UMN online marketplace, similar to eBay, designed exclusively 
 The platform is meant to replace informal methods of student sales (e.g., Snapchat stories, group chats, or third-party marketplace apps) with a structured, searchable, and secure environment tailored to student needs.
 
 Project made as part of the Social Coding Club at the UMN.
+
+Project design doc [here](https://docs.google.com/document/d/1KiJjnbn37LZAS4VHtU9uqtshUr8orX9-fYutaskRtMA/edit?usp=sharing).
