@@ -1,4 +1,4 @@
-# Goldy-s-Market
+# Goldy's-Market
 
 This project is a UMN online marketplace, similar to eBay, designed exclusively for students. It provides a centralized, trusted platform where students can buy and sell items commonly exchanged on campus, such as textbooks, furniture, electronics, and dorm essentials.
 
