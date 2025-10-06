@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 
 function Header() {
   return (
-    <div className="p-4 lg:p-6 flex justify-between items-center bg-white lg:bg-transparent z-10">
+    <header className="flex justify-between items-center bg-white lg:bg-transparent z-10">
       <div className="flex items-center gap-2">
+        { /* TODO: Update with goldy image */}
         <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center">
           <div className="w-4 h-4 bg-white rounded-full"></div>
         </div>
-        <span className="text-lg font-semibold text-gray-900">Goldy's Market</span>
+        <span className="text-xl font-bold text-[#7A0019]">Goldy's Market</span>
       </div>
       <Link
         to="/"
@@ -15,22 +16,39 @@ function Header() {
       >
         Back to Home
       </Link>
-    </div>
+    </header>
   )
 }
 
 function Footer() {
   return (
-    <footer>
-      Stuff
+    <footer className="flex flex-col gap-4 p-4 bg-gray-100 text-center">
+      <div>
+        Only current UMN students with @umn.edu Google accounts can access Goldy's Market
+      </div>
+      <div className="flex justify-center align-center gap-4 text-sm text-gray-600">
+        <Link>
+          <div>
+            Terms of Service
+          </div>
+        </Link>
+        <Link>
+          <div>
+            Privacy Policy
+          </div>
+        </Link>
+      </div>
     </footer>
   )
 }
 
 function Main() {
   return (
-    <div>
-      Main bit here
+    <div className="flex-1 flex justify-center align-center">
+      <div className="flex-0">
+        Main bit here
+
+      </div>
     </div>
   )
 }
@@ -63,9 +81,11 @@ function LeftSection() {
 
 function RightSection() {
   return (
-    <div className="flex flex-col flex-1 bg-white min-h-screen justify-start max-w-640px">
-      <Header />
-      <Main />
+    <div className="flex flex-1 flex-col justify-center lg:justify-start min-h-screen">
+      <div className="p-5 lg:max-w-3xl flex flex-col flex-1 bg-white justify-start max-w-640px gap-4 align-center">
+        <Header />
+        <Main />
+      </div>
       <Footer />
     </div>
   )
