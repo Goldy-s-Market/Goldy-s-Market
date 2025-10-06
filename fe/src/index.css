@@ -4,6 +4,7 @@
   --color-maroon-700: oklch(0.4606 0.1578 18.01);
   --color-maroon-800: oklch(0.3472 0.1394 19.75);
   --color-maroon-900: oklch(0.2983 0.1197 19.27);
+  --font-display: "Inter", sans-serif;
 }
 
 :root {
@@ -15,6 +16,4 @@
 
 * {
   padding: 0;
-  margin: 0;
-  border: 0;
 }
