@@ -26,6 +26,7 @@ function Footer() {
       <div>
         Only current UMN students with @umn.edu Google accounts can access Goldy's Market
       </div>
+      {/* TODO: Add appropriate links once done */}
       <div className="flex justify-center align-center gap-4 text-sm text-gray-600">
         <Link>
           <div>
@@ -44,9 +45,31 @@ function Footer() {
 
 function Main() {
   return (
-    <div className="flex-1 flex justify-center align-center">
-      <div className="flex-0">
-        Main bit here
+    <div className="flex-1 flex flex-col justify-center align-center">
+      <div>
+        <h1>Join Goldy's Market</h1>
+        <div>
+          Sign in with your UMN account to get started
+        </div>
+      </div>
+      <div>
+        <div>
+          i
+        </div>
+        <div>
+          We use your UMN Google account (@umn.edu) to verify student status and ensure a trusted community marketplace.
+        </div>
+      </div>
+      <div>
+        <img src="" alt="G"></img>
+        <div>
+          Continue with UMN Google Account
+        </div>
+      </div>
+      <div>
+        Secure authentication powered by Google
+      </div>
+      <div>
 
       </div>
     </div>
