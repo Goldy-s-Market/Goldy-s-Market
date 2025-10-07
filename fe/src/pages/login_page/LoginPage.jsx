@@ -45,18 +45,18 @@ function Footer() {
 
 function Main() {
   return (
-    <div className="flex-1 flex flex-col justify-center align-center">
-      <div>
-        <h1>Join Goldy's Market</h1>
-        <div>
+    <div className="flex-1 flex flex-col justify-center align-center gap-3">
+      <div className="flex flex-col justify-center align-center gap-1">
+        <h1 className="text-3xl font-bold text-center">Join Goldy's Market</h1>
+        <div className="text-center font-light">
           Sign in with your UMN account to get started
         </div>
       </div>
-      <div>
-        <div>
+      <div className="flex p-4 gap-4 bg-blue-100 rounded-lg border border-blue-400 mx-5 my-6">
+        <div className="flex shrink-0 justify-center align-center bg-blue-400 h-6 w-6 rounded-full text-white">
           i
         </div>
-        <div>
+        <div className="text-md text-[#1E40AF]">
           We use your UMN Google account (@umn.edu) to verify student status and ensure a trusted community marketplace.
         </div>
       </div>
@@ -72,7 +72,7 @@ function Main() {
       <div>
 
       </div>
-    </div>
+    </div >
   )
 }
 
