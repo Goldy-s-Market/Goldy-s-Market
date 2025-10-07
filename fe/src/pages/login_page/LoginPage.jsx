@@ -28,12 +28,12 @@ function Footer() {
       </div>
       {/* TODO: Add appropriate links once done */}
       <div className="flex justify-center align-center gap-4 text-sm text-gray-600">
-        <Link>
+        <Link to="/">
           <div>
             Terms of Service
           </div>
         </Link>
-        <Link>
+        <Link to="/">
           <div>
             Privacy Policy
           </div>
@@ -47,7 +47,7 @@ function Main() {
   return (
     <div className="flex-1 flex flex-col justify-center align-center gap-3">
       <div className="flex flex-col justify-center align-center gap-1">
-        <h1 className="text-3xl font-bold text-center">Join Goldy's Market</h1>
+        <h1 className="text-3xl font-bold text-center mt-4">Join Goldy's Market</h1>
         <div className="text-center font-light">
           Sign in with your UMN account to get started
         </div>
@@ -60,17 +60,52 @@ function Main() {
           We use your UMN Google account (@umn.edu) to verify student status and ensure a trusted community marketplace.
         </div>
       </div>
-      <div>
-        <img src="" alt="G"></img>
-        <div>
-          Continue with UMN Google Account
-        </div>
+      <div className="flex justify-center align-center p-4 gap-4 rounded-lg border border-gray-300 mx-5 text-lg font-medium">
+        <img src="google-color-svgrepo-com.svg" height={24} width={24} alt="G"></img>
+        {/* TODO: Fill in the link or something */}
+        <Link to="">
+          <div>
+            Continue with UMN Google Account
+          </div>
+        </Link>
       </div>
-      <div>
+      <div className="text-center font-light text-gray-400">
         Secure authentication powered by Google
       </div>
-      <div>
-
+      <div className="flex flex-col justify-center gap-2 mt-2">
+        <div className="flex p-2 gap-3 rounded-lg mx-5 my-2 max-w-lg">
+          <img src="tick-success-svgrepo-com.png" alt="tick mark" height={32} width={32} className="mt-1 h-10 w-10 shrink-0"></img>
+          <div className="flex flex-col gap-1 text-md">
+            <span className="font-bold text-lg">
+              Automatic Verification
+            </span>
+            <span className="text-gray-900 font-light">
+              UMN student status verified instantly with your @umn.edu email
+            </span>
+          </div>
+        </div>
+        <div className="flex p-2 gap-3 rounded-lg mx-5 my-2 max-w-lg">
+          <img src="lock-svgrepo-com.png" alt="lock icon" height={30} width={30} className="mt-1 h-10 w-10 shrink-0"></img>
+          <div className="flex flex-col gap-1 text-md">
+            <span className="font-bold text-lg">
+              Secure & private
+            </span>
+            <span className="text-gray-900 font-light">
+              Protecte by Google's enterprise-grade security
+            </span>
+          </div>
+        </div>
+        <div className="flex p-2 gap-3 rounded-lg mx-5 my-2 max-w-lg">
+          <img src="lightning-svgrepo-com.png" alt="ligntning icon" height={32} width={32} className="mt-1 h-10 w-10 shrink-0"></img>
+          <div className="flex flex-col gap-1 text-md">
+            <span className="font-bold text-lg">
+              Quick Access
+            </span>
+            <span className="text-gray-900 font-light">
+              One-click sign in - no passwords to remember or forms to fill
+            </span>
+          </div>
+        </div>
       </div>
     </div >
   )
@@ -105,7 +140,7 @@ function LeftSection() {
 function RightSection() {
   return (
     <div className="flex flex-1 flex-col justify-center lg:justify-start min-h-screen">
-      <div className="p-5 lg:max-w-3xl flex flex-col flex-1 bg-white justify-start max-w-640px gap-4 align-center">
+      <div className="p-5 lg:max-w-3xl flex flex-col flex-1 bg-white justify-start max-w-640px gap-4 ">
         <Header />
         <Main />
       </div>
