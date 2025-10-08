@@ -24,9 +24,37 @@ function HomePage() {
           Connect with you campus community to buy, sell, and bid on everything you need for student life.
         </p>
         {/*Call to action buttons */}
-        <div></div>
+        <div>
+          <button>Start Shopping</button>
+          <button>List an Item</button>
+        </div>
         {/*Searching tool */}
-        <div id="Credibility-section"></div>
+        <div>
+          <div>
+            <div>{/*Magnifying glass goes here */}</div>
+            <input type="text" placeholder="Search for textbooks, electronics, furniture, clothing, and more...">
+            </input>
+          </div> 
+        </div>
+        <div id="credibility-section">
+          <div>
+            <div>{/*This is where the credit icon will be */}
+              
+            </div>
+            <h3>Student Verified</h3>
+            <p>All users verified with UMN email addresses</p>
+          </div>
+          <div>
+            <div>{/*This is where the credit icon will be */}</div>
+            <h3>Safe & Secure</h3>
+            <p>Protected transactions and secure messaging</p>
+          </div>
+          <div>
+            <div>{/*This is where the credit icon will be */}</div>
+            <h3>Quick & Easy</h3>
+            <p>List items in minutes, buy with one click</p>
+          </div>
+        </div>
 
       </main>
     </div>
