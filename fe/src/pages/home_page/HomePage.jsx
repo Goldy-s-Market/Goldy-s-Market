@@ -2,29 +2,29 @@ import { Link } from "react-router-dom";
 
 function HomePage() {
   return (
-    <div id="header-container">
-      <header id="header">
-        <div>
+    <div id="header-container" className="bg-white shadow-lg mx-auto max-w-7xl rounded-lg mt-8 mb-12">
+      <header id="header" className="px-8 py-6 border-gray-100">
+        <div className="flex items-center justify-between">
           {/*Left */}
-          <div >
+          <div className="flex items-center space-x-3">
             {/* Logo and text here */}
-            <div>
+            <div className="w-12 h-12 bg-umn-gold rounded-full flex items-center justify-center shadow-md">
               {/*Logo should go here*/}
               <img></img>
             </div>
-            <span>Goldy's Market</span>
+            <span className="text-2xl font-bold text-umn-maroon">Goldy's Market</span>
           </div>
           {/*right logo container */}
-          <div>
-            <button>Sign In</button>
-            <button>Get Started</button>
+          <div className="flex items-center space-x-4">
+            <button className="text-gray-700 hover:text-umn-maroon font-medium px-4 py-2 rounded-lg transition duration-200">Sign In</button>
+            <button className="bg-umn-maroon hover:bg-red-800 text-white font-medium px-6 py-2 rounded-lg transition duration-200">Get Started</button>
           </div>
         </div>
       </header>
       
       <main id="hero-section">
         <h1>Buy, Sell, Trade with
-          <br>Fellow Students</br></h1>
+          <br/>Fellow Students</h1>
         <p>The trusted marketplace designed exclusively for University of Minnesota students.
           Connect with you campus community to buy, sell, and bid on everything you need for student life.
         </p>
@@ -37,8 +37,7 @@ function HomePage() {
         <div>
           <div>
             <div>{/*Magnifying glass goes here */}</div>
-            <input type="text" placeholder="Search for textbooks, electronics, furniture, clothing, and more...">
-            </input>
+            <input type="text" placeholder="Search for textbooks, electronics, furniture, clothing, and more..." />
           </div> 
         </div>
         <div id="credibility-section">
