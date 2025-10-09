@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
+import { Footer } from "../login_page/LoginPage";
 
 function HomePage() {
-  return (
-    
+  return (    
     <div className="bg-gray-50  flex justify-center b-24">
       {/*There is a responsive layout issue that needs to be fixed */}
       <div className="w-full max-w-7xl px-4">
@@ -20,8 +20,12 @@ function HomePage() {
               </div>
               {/*right logo container */}
               <div className="flex items-center space-x-4">
-                <button className="text-gray-700 hover:text-umn-maroon font-medium px-4 py-2 rounded-lg transition duration-200">Sign In</button>
-                <button className="bg-umn-maroon hover:bg-red-800 text-white font-medium px-6 py-2 rounded-lg transition duration-200">Get Started</button>
+                <Link to="/">
+                  <button className="text-gray-700 hover:text-umn-maroon font-medium px-4 py-2 rounded-lg transition duration-200">Sign In</button>
+                </Link>
+                <Link to="/">
+                  <button className="bg-umn-maroon hover:bg-red-800 text-white font-medium px-6 py-2 rounded-lg transition duration-200">Get Started</button>
+                </Link>
               </div>
             </div>
           </header>
@@ -37,8 +41,12 @@ function HomePage() {
             {/*Call to action buttons */}
             <div className="flex items-center justify-center space-x-4 mb-12">
               {/*Add on click events to new routes */}
-              <button className="bg-umn-maroon hover:bg-red-800 text-white font-semibold px-8 py-4 rounded-lg text-lg transition duration-200 shadow-md">Start Shopping</button>
-              <button className="border-2 border-umn-maroon text-umn-maroon hover:bg-umn-maroon hover:text-white font-semibold px-8 py-4 rounded-lg text-lg transition duration-200">List an Item</button>
+              <Link to="/">
+                <button className="bg-umn-maroon hover:bg-red-800 text-white font-semibold px-8 py-4 rounded-lg text-lg transition duration-200 shadow-md">Start Shopping</button>
+              </Link>
+              <Link to="/">
+                <button className="border-2 border-umn-maroon text-umn-maroon hover:bg-umn-maroon hover:text-white font-semibold px-8 py-4 rounded-lg text-lg transition duration-200">List an Item</button>
+              </Link>
             </div>
             {/*Searching tool */}
             <div id="search-section" className="max-w-2xl mx-auto mb-16">
@@ -83,6 +91,7 @@ function HomePage() {
             </div>
           </main>
         </div>
+        <Footer/>
       </div>
     </div>
   );
