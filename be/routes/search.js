@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Listing = require('../models/Listing');
+const catchAsync = require('../utils/catchAsync');
 
 // GET /api/search?q=keyword&category=books&minPrice=10&maxPrice=100
-router.get('/', async (req, res) => {
-  try {
+router.get('/', catchAsync(async (req, res) => {
     const { q, category, minPrice, maxPrice } = req.query;
     let filter = { status: 'active' };
     
@@ -28,9 +28,6 @@ router.get('/', async (req, res) => {
       .sort({ createdAt: -1 });
     
     res.json(listings);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+}));
 
 module.exports = router;

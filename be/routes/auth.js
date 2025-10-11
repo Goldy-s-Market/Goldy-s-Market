@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const catchAsync = require('../utils/catchAsync');
 
 // POST /api/auth/google - Handle Google Sign-In
-router.post('/google', async (req, res) => {
-  try {
+router.post('/google', catchAsync(async (req, res) => {
     const { email, name, picture } = req.body;
 
     //Authenticate umn email
@@ -53,15 +53,11 @@ router.post('/google', async (req, res) => {
         picture: user.picture,
         isAuthenticated: user.isAuthenticated
       }
-    });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+    }); 
+}));
 
 // POST /api/auth/verify-token - Verify JWT token
-router.post('/verify-token', async (req, res) => {
-  try {
+router.post('/verify-token', catchAsync(async (req, res) => {
     const { token } = req.body;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.userId).select('-__v');
@@ -71,22 +67,15 @@ router.post('/verify-token', async (req, res) => {
     }
     
     res.json({ valid: true, user });
-  } catch (error) {
-    res.status(401).json({ valid: false, error: 'Invalid token' });
-  }
-});
+}));
 
 // POST /api/auth/logout - Logout
-router.post('/logout', async (req, res) => {
-  try {
+router.post('/logout', catchAsync(async (req, res) => {
     const { userId } = req.body;
     if (userId) {
       await User.findByIdAndUpdate(userId, { isAuthenticated: false });
     }
     res.json({ message: 'Logout successful' });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+}));
 
 module.exports = router;
