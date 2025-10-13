@@ -1,6 +1,6 @@
 function MarketplaceSection() {
   return (
-    <div className="marketplace-container">
+    <div className="marketplace-container flex justify-center align-center">
       <h2 className="marketplace-title">Current Marketplace</h2>
       <div className="marketplace-card">
         <div className="marketplace-icon">🏪</div>
