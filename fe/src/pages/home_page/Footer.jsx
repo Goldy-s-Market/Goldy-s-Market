@@ -7,13 +7,12 @@ function Footer() {
             <div className="w-full px-8 pb-8 flex flex-col md:flex-row justify-between">
                 <div className="w-full md:w-2/6 mb-8 md:mb-0">
                     <div className="flex items-center text-xl font-bold mb-4 text-yellow-500">
-
-                        <span className="mr-2">
-                            {/* === replace this with a proper icon or image ==*/}
-                           <svg className="h-6 w-6 inline-block fill-current" viewBox="0 0 24 24"><path d="M12 2L2 21h20L12 2z"/></svg>
-                            Goldy's Market
-                        </span>
+                        <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center shadow-lg text-gray-900 font-bold">
+                            G
+                        </div>
+                        <span>Goldey's Market</span>
                     </div>
+
                     <p className="text-gray-400 text-sm leading-relaxed">
                         The official student marketplace for the University of Minnesota community. Buy, sell, and trade with confidence.
                     </p>
@@ -47,9 +46,15 @@ function Footer() {
                     <h4 className="text-lg font-semibold mb-4 text-yellow-500">Connect</h4>
                     <div className="flex space-x-4 mb-3">
                         {/* === Put in the right directories below for each list item ==*/}
-                        <a href=""  className="text-gray-400 bg-gray-800 p-2 rounded-full hover:text-white transition duration-200 text-sm" aria-label='Facebook'>FB</a>
-                        <a href=""  className="text-gray-400 bg-gray-800 p-2 rounded-full hover:text-white transition duration-200 text-sm" aria-labe="Twitter">TW</a>
-                        <a href=""  className="text-gray-400 bg-gray-800 p-2 rounded-full hover:text-white transition duration-200 text-sm" aria-label="Instagram">IG</a>
+                        <a href=""  className="text-gray-400 bg-gray-800 p-2 rounded-full hover:text-white transition duration-200 text-sm" aria-label='Facebook'>
+                            <img src="/public/facebook-outline-svgrepo-com.svg" alt="Facebook" className="w-6 h-6 hover:opacity-80 transition" />
+                        </a>
+                        <a href=""  className="text-gray-400 bg-gray-800 p-2 rounded-full hover:text-white transition duration-200 text-sm" aria-labe="Twitter">
+                            <img src="/public/twitter-outline-svgrepo-com.svg" alt="Twiiter" className="w-6 h-6 hover:opacity-80 transition" />   
+                        </a>
+                        <a href=""  className="text-gray-400 bg-gray-800 p-2 rounded-full hover:text-white transition duration-200 text-sm" aria-label="Instagram">
+                            <img src="/public/instagram-outline-svgrepo-com.svg" alt="Instagram" className="w-6 h-6 hover:opacity-80 transition" />   
+                        </a>
                     </div>
                     <p className='text-gray-400 text-sm'>
                         Follow us for updates and campus community news
@@ -60,14 +65,16 @@ function Footer() {
 
             <div className="border-t border-gray-700 py-4 px-4 sm:px-6 lg:px-8 text-sm flex flex-col sm:flow-row justify-between items-center text-grey-500 w-full">
                 <p className="text-gray-400 text-center sm:text-left w-full sm:w-auto">
-                    Scopy: {new Date().getFullYear()} Goldy's Market. All rights reserved.
+                © {new Date().getFullYear()} Goldy's Market. All rights reserved.
                 </p>
                 <p className="text-gray-400 text-center sm:text-right w-full sm:w-auto mt-2 sm:mt-0">
-                    Made with Love for the University of Minnesota Community
+                    Made with 
+                    <span className='mx-1 text-red-500 text-lg'>❤️</span>
+                    for the University of Minnesota Community
                 </p>
             </div>
         </footer>
-    );
+    );{/* ===<img src="/public/heart-svgrepo-com.svg" alt="Heart" className ="w-5 h-5 tranisiton"/>==*/}
 }
 
 export default Footer; //
