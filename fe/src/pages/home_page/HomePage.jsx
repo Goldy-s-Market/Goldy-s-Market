@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Footer from './Footer.jsx';
 import MarketplaceSection from "./HomePageSection3";
 import ProductCard from "./CardPage";
 
@@ -15,6 +16,8 @@ function HomePage() {
           vendorName="Albert Einstein">
         </ProductCard>
       </div>
+      <Footer>
+      <Footer />
     </div>
   );
 }
