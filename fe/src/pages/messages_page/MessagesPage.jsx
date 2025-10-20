@@ -10,9 +10,7 @@ function MessagesPage() {
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [messageInput, setMessageInput] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
-  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     socket = io(SOCKET_URL);
@@ -83,7 +81,7 @@ function MessagesPage() {
   //Fetch messages when a contact is selected
   useEffect(() => {
     if(selectedContact && currentUser){
-      //Fetch data asynchronously fro backed.
+      //Fetch data asynchronously from backed.
 
 
       //Emit socket event to join conversation room
@@ -142,14 +140,6 @@ function MessagesPage() {
 
 
       setMessages(prev => [...prev, newMessage]);
-      setMessageInput('');
-    }
-  };
-
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter'){
-      handleSendMessage();
     }
   };
 
@@ -182,8 +172,149 @@ function MessagesPage() {
             <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="Profile" class="w-8 h-8 rounded-full"/>
         </div>
       </header>
+
+      <div className="flex h-[calc(100vh-4rem)]">
+        <ContactsList contacts={contacts} selectedContact={selectedContact} onContactSelect={setSelectedContact}/>
+        <ChatWindow selectedContact={selectedContactData} messages={messages} onSendMessage={handleSendMessage} />
+      </div>
     </div>
   );
 }
 
 export default MessagesPage;
+
+function ContactsList({contacts, selectedContact, onContactSelect}){
+  return(
+    <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+      <div className="p-4 border-b border-gray-200">
+        <h2 className="text-lg font-semibold text-gray-900">Messages</h2>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        {contacts.map((contact) => (
+          <div
+            key={contact.id}
+            onClick={() => onContactSelect(contact.id)}
+            className={`flex items-center p-4 hover:bg-gray-50 cursor-pointer ${
+              selectedContact === contact.id ? 'border-l-4 border-red-800 bg-gray-50' : ''
+            }`}
+          >
+            <div className="relative">
+              <img src={contact.avatar} alt={contact.name} className="w-12 h-12 rounded-full" />
+              <div className={`absolute bottom-0 right-0 w-3 h-3 ${contact.online ? 'bg-green-500' : 'bg-gray-400'} rounded-full border-2 border-white`}></div>
+            </div>
+            <div className="ml-3 flex-1">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium text-gray-900">{contact.name}</h3>
+                <span className="text-xs text-gray-500">{contact.lastMessageTime}</span>
+              </div>
+              <p className="text-sm text-gray-600 truncate">{contact.lastMessage}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  );
+};
+
+function ChatWindow({ selectedContact, messages, onSendMessage }){
+  const [messageInput, setMessageInput] = useState('');
+  const messagesEndRef = useRef(null);
+
+  function handleSendMessage(){
+    if (messageInput.trim()){
+      onSendMessage(messageInput);
+      setMessageInput('');
+    }
+  };
+
+  function handleKeyPress(e){
+    if(e.key === 'Enter'){
+      handleSendMessage();
+    }
+  };
+
+  if(!selectedContact){
+    return(
+      <div className="flex-1 flex items-center justify-center text-gray-500 bg-white">
+        Select a conversation to start messaging
+      </div>
+    );
+  }
+
+  return(
+    <div className="flex-1 flex flex-col bg-white">
+      <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <img src={selectedContact.avatar} alt={selectedContact.name} className="w-10 h-10 rounded-full" />
+          <div>
+            <h3 className="text-lg font-medium text-gray-900">{selectedContact.name}</h3>
+            <p className={`text-sm ${selectedContact.online ? 'text-green-600' : 'text-gray-500'}`}>
+              {selectedContact.online ? 'Online' : 'Offline'}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-3">
+          <button className="p-2 text-gray-600 hover:text-red-800 hover:bg-gray-100 rounded-full">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+          </button>
+          <button className="p-2 text-gray-600 hover:text-red-800 hover:bg-gray-100 rounded-full">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          </button>
+          <button className="p-2 text-gray-600 hover:text-red-800 hover:bg-gray-100 rounded-full">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.map((message) => (
+          <div key={message.id} className={`flex ${message.isOwn ? 'justify-end' : 'justify-start'}`}>
+            <div className={`${
+              message.isOwn 
+                ? 'bg-red-800 text-white' 
+                : 'bg-white border border-gray-200 text-gray-900 shadow-sm'
+            } rounded-2xl px-4 py-2 max-w-xs`}>
+              <p>{message.text}</p>
+              <span className={`text-xs ${message.isOwn ? 'text-gray-200' : 'text-gray-500'} mt-1 block`}>
+                {message.timestamp}
+              </span>
+            </div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
+      <div className="p-4 border-t border-gray-200">
+        <div className="flex items-center space-x-3">
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Type a message..."
+              className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-red-800 focus:border-transparent"
+            />
+          </div>
+          <button
+            onClick={handleSendMessage}
+            className="bg-red-800 text-white p-3 rounded-full hover:bg-opacity-90 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
