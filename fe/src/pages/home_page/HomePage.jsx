@@ -8,7 +8,7 @@ function HomePage() {
     <div>
       <h1 className="underline">This will be the home page</h1>
       <MarketplaceSection>
-      <MarketplaceSection />
+      </MarketplaceSection>
       <div>
         <ProductCard
           name="Decorative Home Table"
@@ -17,7 +17,7 @@ function HomePage() {
         </ProductCard>
       </div>
       <Footer>
-      <Footer />
+      </Footer>
     </div>
   );
 }
