@@ -20,7 +20,7 @@ function Header() {
   )
 }
 
-function Footer() {
+export function Footer() {
   return (
     <footer className="flex flex-col gap-4 p-4 bg-gray-100 text-center">
       <div>
@@ -91,7 +91,7 @@ function Main() {
               Secure & private
             </span>
             <span className="text-gray-900 font-light">
-              Protecte by Google's enterprise-grade security
+              Protective by Google's enterprise-grade security
             </span>
           </div>
         </div>

@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
+  --color-umn-maroon: #7A0019;
+  --color-umn-gold: #FFCC33;
   --color-maroon-700: oklch(0.4606 0.1578 18.01);
   --color-maroon-800: oklch(0.3472 0.1394 19.75);
   --color-maroon-900: oklch(0.2983 0.1197 19.27);
