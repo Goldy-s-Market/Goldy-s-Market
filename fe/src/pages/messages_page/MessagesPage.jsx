@@ -156,6 +156,7 @@ function MessagesPage() {
             <span className="text-xl font-bold text-gray-900">Goldy's Market</span>
           </div>
           <nav class="flex items-center space-x-6">
+            {/*Add routes to pages */}
                 <span class="text-gray-700 hover:text-maroon font-medium cursor-pointer">Marketplace</span>
                 <span class="text-maroon font-medium cursor-pointer">Messages</span>
                 <span class="text-gray-700 hover:text-maroon font-medium cursor-pointer">My Listings</span>
