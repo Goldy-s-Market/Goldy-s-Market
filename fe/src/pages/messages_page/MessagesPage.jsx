@@ -16,7 +16,7 @@ function MessagesPage() {
     socket = io(SOCKET_URL);
 
     // SOCKET EVENT LISTENERS GO HERE
-    socket,on('connect', () => {
+    socket.on('connect', () => {
       console.log('Connected to server')
     })
   }, []);
