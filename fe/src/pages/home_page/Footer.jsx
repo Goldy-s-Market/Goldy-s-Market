@@ -74,7 +74,8 @@ function Footer() {
                 </p>
             </div>
         </footer>
-    );{/* ===<img src="/public/heart-svgrepo-com.svg" alt="Heart" className ="w-5 h-5 tranisiton"/>==*/}
+    );
+    
 }
 
 export default Footer; //
