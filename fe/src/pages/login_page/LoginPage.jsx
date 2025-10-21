@@ -22,12 +22,12 @@ function Header() {
 
 export function Footer() {
   return (
-    <footer className="flex flex-col gap-4 p-4 bg-gray-100 text-center">
+    <footer className="flex flex-col gap-4 p-4 bg-gray-100 text-center text-sm">
       <div>
         Only current UMN students with @umn.edu Google accounts can access Goldy's Market
       </div>
       {/* TODO: Add appropriate links once done */}
-      <div className="flex justify-center align-center gap-4 text-sm text-gray-600">
+      <div className="flex justify-center align-center gap-4 text-xs text-gray-600 ">
         <Link to="/">
           <div>
             Terms of Service
@@ -69,7 +69,7 @@ function Main() {
           </div>
         </Link>
       </div>
-      <div className="text-center font-light text-gray-400">
+      <div className="text-center font-light text-gray-400 text-sm">
         Secure authentication powered by Google
       </div>
       <div className="flex flex-col justify-center gap-2 mt-2">
