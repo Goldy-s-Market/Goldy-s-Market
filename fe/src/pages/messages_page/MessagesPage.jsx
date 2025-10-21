@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, useRef, useId } from "react";
 import io from "socket.io-client";
 
-const SOCKET_URL = "";
+const SOCKET_URL = "http://localhost:3001"; //  3001: port number of backend server
 let socket;
 
 
@@ -15,10 +15,24 @@ function MessagesPage() {
   useEffect(() => {
     socket = io(SOCKET_URL);
 
-    // SOCKET EVENT LISTENERS GO HERE
+    // SOCKET EVENT LISTENERS
     socket.on('connect', () => {
-      console.log('Connected to server')
-    })
+      console.log('Connected to server, Socket ID:', socket.id);
+    });
+
+    socket.on('disconnect', () => {
+      console.log(' Disconnected from server');
+    });
+
+    socket.on('receive-message', (message) => {
+      console.log(' Received message:', message);
+      setMessages(prev => [...prev, { ...message, isOwn: false }]);
+    });
+
+    // Cleanup on unmount
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   // Fetch data from backend
@@ -81,12 +95,11 @@ function MessagesPage() {
   //Fetch messages when a contact is selected
   useEffect(() => {
     if(selectedContact && currentUser){
-      //Fetch data asynchronously from backed.
-
+      //Fetch data asynchronously from backend.
 
       //Emit socket event to join conversation room
-      socket.emit('join-conversation', {useId: currentUser.id, contactId: selectedContact});
-
+      console.log(' Joining conversation room:', { userId: currentUser.id, contactId: selectedContact });
+      socket.emit('join-conversation', { userId: currentUser.id, contactId: selectedContact }); // Fixed typo: useId -> userId
 
       //Mock messages
       setMessages([
@@ -122,22 +135,20 @@ function MessagesPage() {
     }
   }, [selectedContact, currentUser]);
 
-  const handleSendMessage = () => {
-    if (messageInput.trim() && selectedContact){
+  const handleSendMessage = (messageText) => {
+    if (messageText.trim() && selectedContact){
       const newMessage = {
         id: Date.now(),
         senderId: currentUser?.id,
         receiverId: selectedContact,
-        text: messageInput,
+        text: messageText,
         timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
         isOwn: true
       };
 
-
       //TODO Send message to backend
-
+      console.log(' Sending message:', newMessage);
       socket.emit('send-message', newMessage);
-
 
       setMessages(prev => [...prev, newMessage]);
     }
@@ -317,5 +328,3 @@ function ChatWindow({ selectedContact, messages, onSendMessage }){
     </div>
   );
 };
-
-
