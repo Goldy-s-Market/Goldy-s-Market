@@ -52,7 +52,7 @@ const ProductCard = ({
         </p>
 
         {/* Product Description Box - Fixed size with scroll */}
-        <div className="text-sm text-gray-600 mb-4 h-20 overflow-y-auto"> 
+        <div className="text-sm text-gray-600 mb-4 h-20 overflow-y-auto border border-gray-200 rounded p-2 bg-gray-50"> 
           <p>{description || 'A short description of the product. This text box provides key details to the customer.'}</p>
         </div>
 
