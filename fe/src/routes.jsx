@@ -4,6 +4,8 @@ import ErrorPage from "./pages/error_page/ErrorPage";
 import LoginPage from "./pages/login_page/LoginPage";
 import MessagesPage from "./pages/messages_page/MessagesPage";
 import ListingsPage from "./pages/listings/ListingsPage";
+import GuestRoute from "./components/GuestRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const routes = [
   {
@@ -12,9 +14,27 @@ const routes = [
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "login", element: <LoginPage /> },
-      { path: "messages", element: <MessagesPage /> },
-      { path: "listings", element: <ListingsPage /> },
+      { path: "login", 
+        element: (
+          <GuestRoute>
+            <LoginPage /> 
+          </GuestRoute>
+        )
+      },
+      { path: "messages", 
+        element: (
+          <ProtectedRoute>
+            <MessagesPage /> 
+          </ProtectedRoute>
+        )
+      },
+      { path: "listings", 
+        element: (
+          <ProtectedRoute>
+            <ListingsPage /> 
+          </ProtectedRoute>
+        )
+      },
     ],
   },
 ];
