@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef, useId } from "react";
 import io from "socket.io-client";
-
-const SOCKET_URL = "";
-let socket;
+import { messagesAPI, socketConfig } from "../../services/api";
 
 
 function MessagesPage() {

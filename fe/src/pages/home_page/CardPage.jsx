@@ -10,6 +10,7 @@ import React from 'react';
  * @param {string} props.price - Price of the product (e.g., "$49.99").
  * @param {string} props.vendorName - The name of the seller or author (e.g., "TechZone Pro"). (NEW PROP)
  * @param {string} props.description - Short description of the product.
+ * @param {string} props.id - Product ID for linking to individual page.
  * @param {function} props.onAddToCart - Handler for the 'Add to Cart' button.
  * @param {function} props.onAddToWishlist - Handler for the 'Wishlist' button.
  * @param {function} props.onBuyNow - Handler for the 'Buy Now' button.
@@ -20,8 +21,7 @@ const ProductCard = ({
   price,
   vendorName, // Destructured the new prop
   description,
-  onAddToCart,
-  onAddToWishlist,
+  id,
   onBuyNow,
 }) => {
   return (
@@ -29,22 +29,26 @@ const ProductCard = ({
     <div className="max-w-xs mx-auto overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-[1.01] flex flex-col">
       
       {/* Product Image */}
-      <div className="relative h-48 overflow-hidden">
-        <img
-          className="object-cover w-full h-full"
-          src={imageUrl || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxRPzNnDH8tN_lgEu93-jYUao6ARpfk7FSCw&s'}
-          alt={name || 'Product'}
-        />
-      </div>
+      <Link to={`/listings/${id}`} className="block">
+        <div className="relative h-48 overflow-hidden">
+          <img
+            className="object-cover w-full h-full"
+            src={imageUrl || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxRPzNnDH8tN_lgEu93-jYUao6ARpfk7FSCw&s'}
+            alt={name || 'Product'}
+          />
+        </div>
+      </Link>
 
       {/* Card Content Area */}
       <div className="p-5 flex flex-col overflow-auto"> 
         
         {/* Product Name and Price Block */}
-        <div className="flex items-start justify-between mb-1">
-          <h3 className="text-lg font-semibold text-gray-800 leading-tight pr-2" title={name}>{name || 'Product Name'}</h3>
-          <p className="text-xl font-bold text-indigo-600 shrink-0">{price || '$0.00'}</p>
-        </div>
+        <Link to={`/listings/${id}`} className="block">
+          <div className="flex items-start justify-between mb-1">
+            <h3 className="text-lg font-semibold text-gray-800 leading-tight pr-2 hover:text-maroon-800 transition-colors" title={name}>{name || 'Product Name'}</h3>
+            <p className="text-xl font-bold text-indigo-600 shrink-0">{price || '$0.00'}</p>
+          </div>
+        </Link>
 
         {/* Vendor/Author Information (NEW ELEMENT) */}
         <p className="text-xs text-gray-500 mb-3 hover:text-indigo-500 transition duration-150">
