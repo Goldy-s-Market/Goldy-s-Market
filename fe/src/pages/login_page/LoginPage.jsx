@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import CircularLogo from "../CircularLogo";
 
 function Header() {
   return (
@@ -121,10 +122,18 @@ function LeftSection() {
       <div className="absolute bottom-20 left-16 w-20 h-20 border border-yellow-400 rounded-full opacity-50"></div>
 
 
-      <div className="h-[288px] w-[256px]">
-        <img src="/gopher_login.png" alt="gopher image" height={288} width={256} className="box-content overflow-hidden mb-8 grow-0 aspect-auto">
-        </img>
-      </div>
+      <CircularLogo 
+        width={256}
+        height={288}
+        logoSize="w-40 h-40"
+        logoPath="/goldy's-market-logo.png"
+        logoAlt="Goldy's Market Logo"
+        text="GOLDY'S * MARKET * UMN * "
+        backgroundColor="bg-umn-gold"
+        spinDuration={20}
+        onHover="speedUp"
+        className="custom-class"
+      />
       <div className="w-md flex flex-col gap-4">
         <div className="text-5xl text-[#ffcc33] text-center font-bold leading-48px">
           Welcome Gophers!
