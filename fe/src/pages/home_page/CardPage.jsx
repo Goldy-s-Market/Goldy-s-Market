@@ -64,12 +64,14 @@ const ProductCard = ({
         <div className="flex flex-col space-y-2 mt-auto"> 
         
           {/* Buy Button */}
-          <button
-            onClick={onBuyNow}
-            className="w-full py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 cursor-pointer"
-          >
-            Message Sender
-          </button>
+          <Link to='/messages'>
+            <button
+              onClick={onBuyNow}
+              className="w-full py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 cursor-pointer"
+            >
+              Message Sender
+            </button>
+          </Link>
 
         </div>
       </div>

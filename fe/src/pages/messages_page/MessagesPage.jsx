@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef, useId } from "react";
 import io from "socket.io-client";
-import { messagesAPI, socketConfig } from "../../services/api";
+// import { messagesAPI, socketConfig } from "../../services/api";
 
 
 function MessagesPage() {
@@ -11,12 +11,12 @@ function MessagesPage() {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    socket = io(SOCKET_URL);
+    // socket = io(SOCKET_URL);
 
-    // SOCKET EVENT LISTENERS GO HERE
-    socket.on('connect', () => {
-      console.log('Connected to server')
-    })
+    // // SOCKET EVENT LISTENERS GO HERE
+    // socket.on('connect', () => {
+    //   console.log('Connected to server')
+    // })
   }, []);
 
   // Fetch data from backend
@@ -83,7 +83,7 @@ function MessagesPage() {
 
 
       //Emit socket event to join conversation room
-      socket.emit('join-conversation', {useId: currentUser.id, contactId: selectedContact});
+      // socket.emit('join-conversation', {useId: currentUser.id, contactId: selectedContact});
 
 
       //Mock messages
@@ -134,7 +134,7 @@ function MessagesPage() {
 
       //TODO Send message to backend
 
-      socket.emit('send-message', newMessage);
+      // socket.emit('send-message', newMessage);
 
 
       setMessages(prev => [...prev, newMessage]);
