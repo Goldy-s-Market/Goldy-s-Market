@@ -156,7 +156,7 @@ function MessagesPage() {
   const selectedContactData = contacts.find(c => c.id === selectedContact);
   return (
     
-    <div className="bg-gray-50 h-screen overflow-hidden">
+    <div className="bg-gray-50 h-screen w-screen overflow-hidden">
       {/*Header */}
       <header id="header" className="bg-white border-b border=gray-200 h-16 flex items-center px-6 shadow-sm">
         <div className="flex items-center space-x-8">
