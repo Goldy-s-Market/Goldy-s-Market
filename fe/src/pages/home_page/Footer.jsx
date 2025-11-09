@@ -6,11 +6,12 @@ function Footer() {
     <footer className="bg-gray-900 text-white pt-10 w-full">
       <div className="w-full px-8 pb-8 flex flex-col md:flex-row justify-between">
         <div className="w-full md:w-2/6 mb-8 md:mb-0">
-          <div className="flex items-center text-xl font-bold mb-4 text-yellow-500">
-            <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center shadow-lg text-gray-900 font-bold">
+          <div className="flex items-center text-xl font-bold mb-4 text-yellow-500 ">
+            <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center shadow-lg text-gray-900 font-bold mr-2 ">
               G
             </div>
-            <span>Goldey's Market</span>
+
+            <span>Goldy's Market</span>
           </div>
 
           <p className="text-gray-400 text-sm leading-relaxed">
@@ -74,7 +75,7 @@ function Footer() {
         </p>
       </div>
     </footer>
-  ); {/* ===<img src="/public/heart-svgrepo-com.svg" alt="Heart" className ="w-5 h-5 tranisiton"/>==*/ }
+  ); 
 }
 
 export default Footer; //

@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef, useId } from "react";
 import io from "socket.io-client";
+import { messagesAPI, socketConfig } from "../../services/api";
 
 const SOCKET_URL = "http://localhost:3001"; //  3001: port number of backend server
 let socket;
-
-
 function MessagesPage() {
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
@@ -13,7 +12,7 @@ function MessagesPage() {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    socket = io(SOCKET_URL);
+     socket = io(SOCKET_URL);
 
     // SOCKET EVENT LISTENERS
     socket.on('connect', () => {
@@ -99,7 +98,7 @@ function MessagesPage() {
 
       //Emit socket event to join conversation room
       console.log(' Joining conversation room:', { userId: currentUser.id, contactId: selectedContact });
-      socket.emit('join-conversation', { userId: currentUser.id, contactId: selectedContact }); // Fixed typo: useId -> userId
+      socket.emit('join-conversation', { userId: currentUser.id, contactId: selectedContact }); 
 
       //Mock messages
       setMessages([
