@@ -8,7 +8,7 @@ const GuestRoute = ({ children }) => {
 
   if (isAuthenticated) {
     // if signed in, navigate to home page
-    return <Navigate to="/" replace />;
+    return <Navigate to="/listings" replace />;
   }
 
   // otherwise render page

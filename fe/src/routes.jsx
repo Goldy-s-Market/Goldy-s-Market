@@ -16,11 +16,6 @@ const routes = [
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
-      // { path: "login", element: <LoginPage /> },
-      // { path: "messages", element: <MessagesPage /> },
-      // { path: "listings", element: <ListingsPage /> },
-      // { path: "listings/add", element: <AddListingPage /> },
-      // { path: "listings/:id", element: <IndividualListingPage /> },
       { path: "login", 
         element: (
           <GuestRoute>
@@ -39,6 +34,20 @@ const routes = [
         element: (
           <ProtectedRoute>
             <ListingsPage /> 
+          </ProtectedRoute>
+        )
+      },
+      { path: "listings/add", 
+        element: (
+          <ProtectedRoute>
+            <AddListingPage /> 
+          </ProtectedRoute>
+        )
+      },
+      { path: "listings/:id", 
+        element: (
+          <ProtectedRoute>
+            <IndividualListingPage /> 
           </ProtectedRoute>
         )
       },

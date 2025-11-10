@@ -50,7 +50,7 @@ function Footer() {
             <a href="" className="text-gray-400 bg-gray-800 p-2 rounded-full hover:text-white transition duration-200 text-sm" aria-label='Facebook'>
               <img src="/facebook-outline-svgrepo-com.svg" alt="Facebook" className="w-6 h-6 hover:opacity-80 transition" />
             </a>
-            <a href="" className="text-gray-400 bg-gray-800 p-2 rounded-full hover:text-white transition duration-200 text-sm" aria-labe="Twitter">
+            <a href="" className="text-gray-400 bg-gray-800 p-2 rounded-full hover:text-white transition duration-200 text-sm" aria-label="Twitter">
               <img src="/twitter-outline-svgrepo-com.svg" alt="Twiiter" className="w-6 h-6 hover:opacity-80 transition" />
             </a>
             <a href="" className="text-gray-400 bg-gray-800 p-2 rounded-full hover:text-white transition duration-200 text-sm" aria-label="Instagram">
@@ -75,7 +75,7 @@ function Footer() {
         </p>
       </div>
     </footer>
-  ); 
+  );
 }
 
 export default Footer; //

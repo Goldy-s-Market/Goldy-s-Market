@@ -3,6 +3,8 @@ require("dotenv").config();
 const express = require("express"); // Fixed typo from "expresss"
 const mongoose = require("mongoose");
 const cors = require('cors');
+const session = require('express-session');
+const passport = require('passport');
 
 const app = express();
 
@@ -18,7 +20,23 @@ app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // CORS middleware (if frontend is on different port)
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true,
+}));
+
+// Session + Passport (for OAuth flows)
+// Note: We still generate JWTs for the frontend; session is used for passport flow handling.
+app.use(session({
+  secret: process.env.SESSION_SECRET || process.env.JWT_SECRET || 'super-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // TODO: secure should be true in production with HTTPS
+}));
+
+require('./config/passport');
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Import routes
 const routes = require('./routes');

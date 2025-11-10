@@ -45,7 +45,7 @@ function HomePage() {
               <Link to="/listings">
                 <button className="bg-umn-maroon hover:bg-red-800 text-white font-semibold px-8 py-4 rounded-lg text-lg transition duration-200 shadow-md cursor-pointer">Start Shopping</button>
               </Link>
-              <Link to="/login">
+              <Link to="/listings/add">
                 <button className="border-2 border-umn-maroon text-umn-maroon hover:bg-umn-maroon hover:text-white font-semibold px-8 py-4 rounded-lg text-lg transition duration-200 cursor-pointer">List an Item</button>
               </Link>
             </div>

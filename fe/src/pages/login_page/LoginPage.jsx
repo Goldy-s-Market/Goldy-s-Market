@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useEffect } from 'react';
 import CircularLogo from "../CircularLogo";
 
 function Header() {
@@ -45,6 +46,22 @@ export function Footer() {
 }
 
 function Main() {
+  const location = useLocation();
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const token = params.get('token');
+      if (token) {
+        // store token and redirect to app root
+        localStorage.setItem('token', token);
+        // remove token from URL without reloading
+        window.history.replaceState({}, document.title, window.location.pathname);
+        window.location.href = '/';
+      }
+    } catch {
+      // ignore
+    }
+  }, [location.search]);
   return (
     <div className="flex-1 flex flex-col justify-center align-center gap-3">
       <div className="flex flex-col justify-center align-center gap-1">
@@ -63,16 +80,41 @@ function Main() {
       </div>
       <div className="flex justify-center align-center p-4 gap-4 rounded-lg border border-gray-300 mx-5 text-lg font-medium">
         <img src="google-color-svgrepo-com.svg" height={24} width={24} alt="G"></img>
-        {/* TODO: Fill in the link or something */}
-        <Link to="">
-          <div>
-            Continue with UMN Google Account
-          </div>
-        </Link>
+        {/* Redirect to backend OAuth start endpoint */}
+        <a
+          href={`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/auth/google`}
+          className="hover:underline"
+        >
+          Continue with UMN Google Account
+        </a>
       </div>
       <div className="text-center font-light text-gray-400 text-sm">
         Secure authentication powered by Google
       </div>
+      {/* Demo bypass: calls backend /api/auth/demo to get a token for local dev/testing */}
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={async () => {
+            try {
+              const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/auth/demo`);
+              const data = await res.json();
+              if (data.token) {
+                localStorage.setItem('token', data.token);
+                window.location.href = '/';
+              }
+            } catch (err) {
+              console.error('Demo login failed', err);
+            }
+          }}
+          className="px-4 py-2 bg-gray-200 rounded-md text-sm"
+        >
+          Demo: Bypass Login
+        </button>
+      </div>
+
+      {/* Handle token returned from backend after OAuth redirect */}
+      {/* This effect runs on mount and stores token from query param if present */}
+      
       <div className="flex flex-col justify-center gap-2 mt-2">
         <div className="flex p-2 gap-3 rounded-lg mx-5 my-2 max-w-lg">
           <img src="tick-success-svgrepo-com.png" alt="tick mark" height={32} width={32} className="mt-1 h-10 w-10 shrink-0"></img>
