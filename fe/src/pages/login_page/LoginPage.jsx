@@ -56,7 +56,7 @@ function Main() {
         localStorage.setItem('token', token);
         // remove token from URL without reloading
         window.history.replaceState({}, document.title, window.location.pathname);
-        window.location.href = '/';
+        window.location.href = '/listings';
       }
     } catch {
       // ignore

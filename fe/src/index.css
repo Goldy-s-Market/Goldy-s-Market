@@ -1,6 +1,8 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
 
 @theme {
+  --font-caveat: 'Caveat', cursive;
   --color-umn-maroon: #7A0019;
   --color-umn-gold: #FFCC33;
   --color-maroon-700: oklch(0.4606 0.1578 18.01);
