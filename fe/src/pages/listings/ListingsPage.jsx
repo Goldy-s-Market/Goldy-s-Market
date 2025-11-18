@@ -116,7 +116,7 @@ function ListingsPage() {
 
 
   return (
-    <div className="fixed w-full max-w-7xl jusitfy-center">
+    <div className="w-full max-w-7xl jusitfy-center">
       {/* Universal Header */}
       <UniversalHeader />
       
