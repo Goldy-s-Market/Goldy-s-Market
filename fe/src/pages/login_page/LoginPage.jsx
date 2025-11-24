@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from 'react';
-import CircularLogo from "../CircularLogo";
+import CircularLogo from "../Goldy-market-logo/CircularLogo";
 
 function Header() {
   return (

@@ -72,7 +72,7 @@ const useListingsData = (selectedCategory = null, searchQuery = '') => {
         // TODO: Make backend handle search filtering
         let filteredData = data;
         if (searchQuery.trim()) {
-          filteredData = data.filter(item => 
+          filteredData = data.filter(item =>
             item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
             item.category.toLowerCase().includes(searchQuery.toLowerCase())
@@ -119,10 +119,10 @@ function ListingsPage() {
     <div className="w-screen jusitfy-center">
       {/* Universal Header */}
       <UniversalHeader />
-      
+
       {/* Main Content - REMOVED the white background and min-h-screen */}
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
+
         {/* Category Filters */}
         <div className="mb-8">
           <div className="flex flex-wrap gap-3 justify-center">
@@ -242,7 +242,7 @@ function ListingsPage() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="flex flex-wrap justify-center gap-6">
               {listings.map((listing) => (
                 <ProductCard
                   key={listing.id}
@@ -257,7 +257,7 @@ function ListingsPage() {
                   onBuyNow={() => console.log('Buy now:', listing.title)}
                 />
               ))}
-            </div>
+              </div>
           )}
         </div>
       </div>

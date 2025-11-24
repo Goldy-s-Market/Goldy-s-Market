@@ -20,14 +20,13 @@ const ProductCard = ({
   name,
   price,
   vendorName, // Destructured the new prop
-  description,
   id,
   onBuyNow,
 }) => {
   return (
-    // Card container is flexible to stretch with description content
-    <div className="max-w-xs mx-auto overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-[1.01] flex flex-col">
-      
+    // Card container is fixed-width on larger screens, full-width on mobile
+    <div className="w-full sm:w-[300px] md:w-[300px] lg:w-[300px] max-w-[300px] flex-shrink-0 overflow-hidden bg-white rounded-4xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-[1.01] flex flex-col h-full min-h-[450px]">
+
       {/* Product Image */}
       <Link to={`/listings/${id}`} className="block">
         <div className="relative h-48 overflow-hidden">
@@ -39,13 +38,14 @@ const ProductCard = ({
         </div>
       </Link>
 
-      {/* Card Content Area */}
-      <div className="p-5 flex flex-col overflow-auto"> 
-        
+      {/* Card Content Area - use flex-1 so the content grows and the button can be pushed to the bottom with mt-auto */}
+      <div className="p-5 flex flex-col flex-1 overflow-hidden">
+
         {/* Product Name and Price Block */}
         <Link to={`/listings/${id}`} className="block">
+          {/* Title needs to truncate if too long. inside a flex box, set min-w-0 so it can shrink then apply truncate */}
           <div className="flex items-start justify-between mb-1">
-            <h3 className="text-lg font-semibold text-gray-800 leading-tight pr-2 hover:text-maroon-800 transition-colors" title={name}>{name || 'Product Name'}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 leading-tight pr-2 hover:text-maroon-800 transition-colors flex-1 min-w-0 multiline-ellipsis-3" title={name}>{name || 'Product Name'}</h3>
             <p className="text-xl font-bold text-indigo-600 shrink-0">{price || '$0.00'}</p>
           </div>
         </Link>
@@ -55,19 +55,22 @@ const ProductCard = ({
           Sold by: <a href="#" className="font-medium">{vendorName || 'Unknown Seller'}</a>
         </p>
 
-        {/* Product Description Box - Fixed size with scroll */}
-        <div className="text-sm text-gray-600 mb-4 h-20 overflow-y-auto border border-gray-200 rounded p-2 bg-gray-50"> 
-          <p>{description || 'A short description of the product. This text box provides key details to the customer.'}</p>
-        </div>
 
         {/* Action Buttons - Pushed to the bottom */}
-        <div className="flex flex-col space-y-2 mt-auto"> 
-        
+        <div className="flex flex-col space-y-2 mt-auto">
+
+          <Link to={`/listings/${id}`}>
+            <button
+              className="w-full py-2 text-md font-medium text-[#7A0019] border-2 border-[#7A0019] bg-white rounded-2xl hover:bg-maroon-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 cursor-pointer"
+            >
+              View Details
+            </button>
+          </Link>
           {/* Buy Button */}
           <Link to='/messages'>
             <button
               onClick={onBuyNow}
-              className="w-full py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 cursor-pointer"
+              className="w-full py-2 text-md font-medium text-white bg-[#7A0019] rounded-2xl hover:bg-maroon-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 cursor-pointer"
             >
               Message Sender
             </button>
