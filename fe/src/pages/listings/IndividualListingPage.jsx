@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import HourGlassLoader from "../HourGlassLoader";
+import HourGlassLoader from "../Goldy-market-logo/HourGlassLoader";
 // eslint-disable-next-line no-unused-vars
 import { listingsAPI } from "../../services/api";
 
