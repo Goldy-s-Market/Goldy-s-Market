@@ -116,7 +116,7 @@ function ListingsPage() {
 
 
   return (
-    <div className="w-full max-w-7xl jusitfy-center">
+    <div className="w-screen jusitfy-center">
       {/* Universal Header */}
       <UniversalHeader />
       
@@ -193,7 +193,7 @@ function ListingsPage() {
         )}
 
         {/* Listings Grid */}
-        <div className="min-h-[60vh]">
+        <div className="min-h-[60vh] max-w-7xl mx-auto">
           {loading ? (
             <div className="flex items-center justify-center py-20">
               <HourGlassLoader />

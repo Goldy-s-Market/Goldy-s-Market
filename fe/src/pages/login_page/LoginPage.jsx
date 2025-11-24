@@ -92,7 +92,7 @@ function Main() {
         Secure authentication powered by Google
       </div>
       {/* Demo bypass: calls backend /api/auth/demo to get a token for local dev/testing */}
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-4 cursor-pointer">
         <button
           onClick={async () => {
             try {

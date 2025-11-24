@@ -9,7 +9,7 @@ function App() {
       {/*   <Link to="/messages" className="mr-4">Messages</Link> */}
       {/*   <Link to="/login" className='mr-4'>Login</Link> */}
       {/* </nav> } */}
-      <main className="p-6 bg-white">
+      <main className="p-6">
         <Outlet />
       </main>
     </div>
