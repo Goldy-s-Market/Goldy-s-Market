@@ -3,9 +3,12 @@ const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:8080';
 
 const apiRequest = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
+  const token = localStorage.getItem('token');
+  
   const config = {
     headers: {
       'Content-Type': 'application/json',
+      ...(token && { 'Authorization': `Bearer ${token}` }),
       ...options.headers,
     },
     ...options,
@@ -22,6 +25,26 @@ const apiRequest = async (endpoint, options = {}) => {
   } catch (error) {
     console.error(`API request failed for ${endpoint}:`, error);
     throw error;
+  }
+};
+
+// Helper function to get current user ID from token
+export const getCurrentUserId = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  
+  try {
+    // Decode JWT token (without verification - just for getting user ID)
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    const decoded = JSON.parse(jsonPayload);
+    return decoded.userId || null;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return null;
   }
 };
 
@@ -87,7 +110,7 @@ export const listingsAPI = {
 export const messagesAPI = {
   getConversations: (userId) => apiRequest(`/messages/conversations/${userId}`),
   
-  getMessages: (conversationId) => apiRequest(`/messages/${conversationId}`),
+  getConversation: (userId, otherUserId) => apiRequest(`/messages/conversation/${userId}/${otherUserId}`),
   
   sendMessage: (messageData) => apiRequest('/messages', {
     method: 'POST',

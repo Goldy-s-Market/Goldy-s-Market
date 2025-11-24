@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 
-import React from 'react';
 
 /**
  * A reusable product card component for an e-commerce website.

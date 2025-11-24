@@ -41,3 +41,11 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Multiline truncation utility (3-line clamp). Use on headings/content that should grow up to 3 lines then show ellipsis */
+.multiline-ellipsis-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}

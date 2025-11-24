@@ -1,192 +1,270 @@
-import { Link } from "react-router-dom";
-import { useState, useEffect, useRef, useId } from "react";
+import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
-import { messagesAPI, socketConfig } from "../../services/api";
+import { messagesAPI, socketConfig, getCurrentUserId, usersAPI } from "../../services/api";
+import UniversalHeader from "../../components/UniversalHeader";
 
-const SOCKET_URL = "http://localhost:3001"; //  3001: port number of backend server
 let socket;
+
 function MessagesPage() {
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
   const [messages, setMessages] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [loadingMessages, setLoadingMessages] = useState(false);
+  const messagesEndRef = useRef(null);
 
+  // Initialize socket connection with authentication
   useEffect(() => {
-     socket = io(SOCKET_URL);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Not authenticated. Please log in.');
+      setLoading(false);
+      return;
+    }
 
-    // SOCKET EVENT LISTENERS
+    // Connect socket with authentication token
+    socket = io(socketConfig.url, {
+      ...socketConfig.options,
+      auth: {
+        token: token
+      }
+    });
+
+    // Socket event listeners
     socket.on('connect', () => {
       console.log('Connected to server, Socket ID:', socket.id);
     });
 
     socket.on('disconnect', () => {
-      console.log(' Disconnected from server');
+      console.log('Disconnected from server');
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
+      setError('Failed to connect to server');
     });
 
     socket.on('receive-message', (message) => {
-      console.log(' Received message:', message);
-      setMessages(prev => [...prev, { ...message, isOwn: false }]);
+      console.log('Received message:', message);
+      // Add message handler that checks current state
+      setMessages(prev => {
+        // Get current selected contact and user from state
+        const currentSelectedContact = selectedContact;
+        const currentUserId = getCurrentUserId();
+        
+        // Only add message if it's for the currently selected contact
+        if (currentSelectedContact && 
+            (message.senderId === currentSelectedContact || message.receiverId === currentSelectedContact)) {
+          // Check if message already exists (avoid duplicates)
+          const exists = prev.some(m => m.id === message.id);
+          if (exists) return prev;
+          
+          return [...prev, {
+            id: message.id,
+            senderId: message.senderId,
+            receiverId: message.receiverId,
+            text: message.text,
+            timestamp: message.timestamp,
+            isOwn: message.senderId === currentUserId
+          }];
+        }
+        return prev;
+      });
+    });
+
+    socket.on('error', (error) => {
+      console.error('Socket error:', error);
+      setError(error.message || 'Socket error occurred');
     });
 
     // Cleanup on unmount
     return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  // Fetch data from backend
-  useEffect(() => {
-
-    // TODO fetch user data from backend
-    setCurrentUser({
-      id: 1,
-      name: 'You',
-      avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg'
-    })
-
-    setContacts([
-      {
-        id: 2,
-        name: "Lynda Miller",
-        avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg',
-        online: true,
-        lastMessage: 'That sounds fair. Could we meet...',
-        lastMessageTime: '2m ago'
-      },
-      {
-        id: 3,
-        name: 'Mike Johnson',
-        avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg',
-        online: false,
-        lastMessage: 'Thanks for the quick response!',
-        lastMessageTime: '1h ago'
-      },
-      {
-        id: 4,
-        name: 'Emily Rodriguez',
-        avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-6.jpg',
-        online: true,
-        lastMessage: 'Is the textbook still available?',
-        lastMessageTime: '3h ago'
-      },
-      {
-        id: 5,
-        name: 'David Lee',
-        avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-8.jpg',
-        online: false,
-        lastMessage: 'Perfect condition, just as described',
-        lastMessageTime: '1d ago'
-      },
-      {
-        id: 6,
-        name: 'Alex Thompson',
-        avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-9.jpg',
-        online: true,
-        lastMessage: 'Let me know when you\'re free',
-        lastMessageTime: '2d ago'
+      if (socket) {
+        socket.disconnect();
       }
-    ]);
-
-    setSelectedContact(2);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
-  //Fetch messages when a contact is selected
+  // Fetch current user and conversations
   useEffect(() => {
-    if(selectedContact && currentUser){
-      //Fetch data asynchronously from backend.
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      //Emit socket event to join conversation room
-      console.log(' Joining conversation room:', { userId: currentUser.id, contactId: selectedContact });
-      socket.emit('join-conversation', { userId: currentUser.id, contactId: selectedContact }); 
-
-      //Mock messages
-      setMessages([
-        {
-          id: 1,
-          senderId: 2,
-          text: 'Hi! Is the iPad you posted still available?',
-          timestamp: '10:30 AM',
-          isOwn: false
-        },
-        {
-          id: 2,
-          senderId: 1,
-          text: 'Yes, it\'s still available! It\'s the 2021 model in great condition.',
-          timestamp: '10:32 AM',
-          isOwn: true
-        },
-        {
-          id: 3,
-          senderId: 2,
-          text: 'Awesome! How much are you asking for it?',
-          timestamp: '10:35 AM',
-          isOwn: false
-        },
-        {
-          id: 4,
-          senderId: 1,
-          text: 'I\'m asking $350, but I\'m flexible. The original price was $600.',
-          timestamp: '10:37 AM',
-          isOwn: true
+        const userId = getCurrentUserId();
+        if (!userId) {
+          setError('User not found. Please log in again.');
+          setLoading(false);
+          return;
         }
-      ]);
-    }
+
+        // Fetch current user profile
+        const userData = await usersAPI.getProfile(userId);
+        setCurrentUser({
+          id: userData._id || userData.id,
+          name: userData.name,
+          avatar: userData.picture || 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg'
+        });
+
+        // Fetch conversations
+        const conversations = await messagesAPI.getConversations(userId);
+        
+        // Transform conversations to match the expected format
+        const formattedContacts = conversations.map(conv => ({
+          id: conv.id,
+          name: conv.name,
+          avatar: conv.avatar,
+          online: conv.online || false,
+          lastMessage: conv.lastMessage || '',
+          lastMessageTime: conv.lastMessageTime || ''
+        }));
+
+        setContacts(formattedContacts);
+        
+        // Auto-select first contact if available
+        if (formattedContacts.length > 0 && !selectedContact) {
+          setSelectedContact(formattedContacts[0].id);
+        }
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError('Failed to load conversations. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Fetch messages when a contact is selected
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (!selectedContact || !currentUser) {
+        setMessages([]);
+        return;
+      }
+
+      try {
+        setLoadingMessages(true);
+        
+        // Join conversation room via socket
+        if (socket && socket.connected) {
+          socket.emit('join-conversation', { 
+            contactId: selectedContact 
+          });
+        }
+
+        // Fetch messages from API
+        const messagesData = await messagesAPI.getConversation(
+          currentUser.id, 
+          selectedContact
+        );
+
+        // Transform messages to match expected format
+        const formattedMessages = messagesData.map(msg => ({
+          id: msg._id || msg.id,
+          senderId: typeof msg.sender === 'object' ? (msg.sender._id || msg.sender.id) : msg.sender,
+          receiverId: typeof msg.recipient === 'object' ? (msg.recipient._id || msg.recipient.id) : msg.recipient,
+          text: msg.content,
+          timestamp: new Date(msg.createdAt).toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit' 
+          }),
+          isOwn: (typeof msg.sender === 'object' ? (msg.sender._id || msg.sender.id) : msg.sender) === currentUser.id
+        }));
+
+        setMessages(formattedMessages);
+      } catch (err) {
+        console.error('Error fetching messages:', err);
+        setError('Failed to load messages. Please try again.');
+      } finally {
+        setLoadingMessages(false);
+      }
+    };
+
+    fetchMessages();
   }, [selectedContact, currentUser]);
 
-  const handleSendMessage = (messageText) => {
-    if (messageText.trim() && selectedContact){
-      const newMessage = {
-        id: Date.now(),
-        senderId: currentUser?.id,
-        receiverId: selectedContact,
-        text: messageText,
-        timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
-        isOwn: true
-      };
-
-      //TODO Send message to backend
-      console.log(' Sending message:', newMessage);
-      socket.emit('send-message', newMessage);
-
-      setMessages(prev => [...prev, newMessage]);
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
+  }, [messages]);
+
+  const handleSendMessage = (messageText) => {
+    if (!messageText.trim() || !selectedContact || !currentUser || !socket) {
+      return;
+    }
+
+    const messageData = {
+      receiverId: selectedContact,
+      content: messageText.trim(),
+      listing: null // Can be updated later if needed
+    };
+
+    // Send message via socket
+    socket.emit('send-message', messageData);
+
+    // Optimistically add message to UI (will be confirmed when received from server)
+    const tempMessage = {
+      id: `temp-${Date.now()}`,
+      senderId: currentUser.id,
+      receiverId: selectedContact,
+      text: messageText.trim(),
+      timestamp: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
+      isOwn: true
+    };
+
+    setMessages(prev => [...prev, tempMessage]);
   };
 
   const selectedContactData = contacts.find(c => c.id === selectedContact);
-  return (
-    
-    <div className="bg-gray-50 h-screen w-screen overflow-hidden">
-      {/*Header */}
-      <header id="header" className="bg-white border-b border=gray-200 h-16 flex items-center px-6 shadow-sm">
-        <div className="flex items-center space-x-8">
-          <div className="flex items-center space-x-2">
-            {/*Logo goes here */}
-            <div></div>
-            <span className="text-xl font-bold text-gray-900">Goldy's Market</span>
-          </div>
-          <nav class="flex items-center space-x-6">
-            {/*Add routes to pages */}
-                <span class="text-gray-700 hover:text-maroon font-medium cursor-pointer">Marketplace</span>
-                <span class="text-maroon font-medium cursor-pointer">Messages</span>
-                <span class="text-gray-700 hover:text-maroon font-medium cursor-pointer">My Listings</span>
-          </nav>
-        </div>
-        <div class="ml-auto flex items-center space-x-4">
-            <button class="relative p-2 text-gray-600 hover:text-maroon">
-                <i class="text-lg" data-fa-i2svg=""><svg class="svg-inline--fa fa-bell" aria-hidden="true" focusable="false" data-prefix="far" data-icon="bell" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"></path></svg></i>
-                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-            </button>
-            <button class="p-2 text-gray-600 hover:text-maroon">
-                <i class="text-lg" data-fa-i2svg=""><svg class="svg-inline--fa fa-gear" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="gear" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"></path></svg></i>
-            </button>
-            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="Profile" class="w-8 h-8 rounded-full"/>
-        </div>
-      </header>
 
+  if (loading) {
+    return (
+      <div className="bg-gray-50 h-screen w-screen overflow-hidden">
+        <UniversalHeader />
+        <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
+          <div className="text-gray-500">Loading conversations...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !currentUser) {
+    return (
+      <div className="bg-gray-50 h-screen w-screen overflow-hidden">
+        <UniversalHeader />
+        <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
+          <div className="text-red-600">{error}</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-gray-50 h-screen w-screen overflow-hidden flex flex-col">
+      <UniversalHeader />
       <div className="flex h-[calc(100vh-4rem)]">
-        <ContactsList contacts={contacts} selectedContact={selectedContact} onContactSelect={setSelectedContact}/>
-        <ChatWindow selectedContact={selectedContactData} messages={messages} onSendMessage={handleSendMessage} />
+        <ContactsList 
+          contacts={contacts} 
+          selectedContact={selectedContact} 
+          onContactSelect={setSelectedContact}
+          loading={loading}
+        />
+        <ChatWindow 
+          selectedContact={selectedContactData} 
+          messages={messages} 
+          onSendMessage={handleSendMessage}
+          loading={loadingMessages}
+          messagesEndRef={messagesEndRef}
+        />
       </div>
     </div>
   );
@@ -194,8 +272,34 @@ function MessagesPage() {
 
 export default MessagesPage;
 
-function ContactsList({contacts, selectedContact, onContactSelect}){
-  return(
+function ContactsList({ contacts, selectedContact, onContactSelect, loading }) {
+  if (loading) {
+    return (
+      <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+        <div className="p-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-900">Messages</h2>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-gray-500">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (contacts.length === 0) {
+    return (
+      <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+        <div className="p-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-900">Messages</h2>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-gray-500 text-center px-4">No conversations yet. Start a conversation!</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
     <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
       <div className="p-4 border-b border-gray-200">
         <h2 className="text-lg font-semibold text-gray-900">Messages</h2>
@@ -210,13 +314,20 @@ function ContactsList({contacts, selectedContact, onContactSelect}){
             }`}
           >
             <div className="relative">
-              <img src={contact.avatar} alt={contact.name} className="w-12 h-12 rounded-full" />
+              <img 
+                src={contact.avatar} 
+                alt={contact.name} 
+                className="w-12 h-12 rounded-full"
+                onError={(e) => {
+                  e.target.src = 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg';
+                }}
+              />
               <div className={`absolute bottom-0 right-0 w-3 h-3 ${contact.online ? 'bg-green-500' : 'bg-gray-400'} rounded-full border-2 border-white`}></div>
             </div>
-            <div className="ml-3 flex-1">
+            <div className="ml-3 flex-1 min-w-0">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-gray-900">{contact.name}</h3>
-                <span className="text-xs text-gray-500">{contact.lastMessageTime}</span>
+                <h3 className="text-sm font-medium text-gray-900 truncate">{contact.name}</h3>
+                <span className="text-xs text-gray-500 ml-2 flex-shrink-0">{contact.lastMessageTime}</span>
               </div>
               <p className="text-sm text-gray-600 truncate">{contact.lastMessage}</p>
             </div>
@@ -224,40 +335,45 @@ function ContactsList({contacts, selectedContact, onContactSelect}){
         ))}
       </div>
     </div>
-
   );
-};
+}
 
-function ChatWindow({ selectedContact, messages, onSendMessage }){
+function ChatWindow({ selectedContact, messages, onSendMessage, loading, messagesEndRef }) {
   const [messageInput, setMessageInput] = useState('');
-  const messagesEndRef = useRef(null);
 
-  function handleSendMessage(){
-    if (messageInput.trim()){
+  const handleSendMessage = () => {
+    if (messageInput.trim()) {
       onSendMessage(messageInput);
       setMessageInput('');
     }
   };
 
-  function handleKeyPress(e){
-    if(e.key === 'Enter'){
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
       handleSendMessage();
     }
   };
 
-  if(!selectedContact){
-    return(
+  if (!selectedContact) {
+    return (
       <div className="flex-1 flex items-center justify-center text-gray-500 bg-white">
         Select a conversation to start messaging
       </div>
     );
   }
 
-  return(
+  return (
     <div className="flex-1 flex flex-col bg-white">
       <div className="p-4 border-b border-gray-200 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <img src={selectedContact.avatar} alt={selectedContact.name} className="w-10 h-10 rounded-full" />
+          <img 
+            src={selectedContact.avatar} 
+            alt={selectedContact.name} 
+            className="w-10 h-10 rounded-full"
+            onError={(e) => {
+              e.target.src = 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg';
+            }}
+          />
           <div>
             <h3 className="text-lg font-medium text-gray-900">{selectedContact.name}</h3>
             <p className={`text-sm ${selectedContact.online ? 'text-green-600' : 'text-gray-500'}`}>
@@ -285,21 +401,29 @@ function ChatWindow({ selectedContact, messages, onSendMessage }){
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
-          <div key={message.id} className={`flex ${message.isOwn ? 'justify-end' : 'justify-start'}`}>
-            <div className={`${
-              message.isOwn 
-                ? 'bg-red-800 text-white' 
-                : 'bg-white border border-gray-200 text-gray-900 shadow-sm'
-            } rounded-2xl px-4 py-2 max-w-xs`}>
-              <p>{message.text}</p>
-              <span className={`text-xs ${message.isOwn ? 'text-gray-200' : 'text-gray-500'} mt-1 block`}>
-                {message.timestamp}
-              </span>
-            </div>
+        {loading && messages.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-gray-500">Loading messages...</div>
           </div>
-        ))}
-        <div ref={messagesEndRef} />
+        ) : (
+          <>
+            {messages.map((message) => (
+              <div key={message.id} className={`flex ${message.isOwn ? 'justify-end' : 'justify-start'}`}>
+                <div className={`${
+                  message.isOwn 
+                    ? 'bg-red-800 text-white' 
+                    : 'bg-white border border-gray-200 text-gray-900 shadow-sm'
+                } rounded-2xl px-4 py-2 max-w-xs`}>
+                  <p>{message.text}</p>
+                  <span className={`text-xs ${message.isOwn ? 'text-gray-200' : 'text-gray-500'} mt-1 block`}>
+                    {message.timestamp}
+                  </span>
+                </div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </>
+        )}
       </div>
 
       <div className="p-4 border-t border-gray-200">
@@ -326,4 +450,4 @@ function ChatWindow({ selectedContact, messages, onSendMessage }){
       </div>
     </div>
   );
-};
+}
