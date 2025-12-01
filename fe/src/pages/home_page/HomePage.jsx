@@ -15,7 +15,7 @@ function HomePage() {
                 {/* Logo and text here */}
                 <div className="w-12 h-12 bg-umn-gold rounded-full flex items-center justify-center shadow-md">
                   {/*Logo should go here*/}
-                  <img></img>
+                  <img src="/gopher_login.png" alt='Goldy Gopher Logo' className='w-50% h-full object-cover rounded-full'/>
                 </div>
                 <span className="text-2xl font-bold text-umn-maroon">Goldy's Market</span>
               </div>

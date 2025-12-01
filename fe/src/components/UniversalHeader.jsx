@@ -25,10 +25,9 @@ function UniversalHeader() {
           {/* Logo Section */}
           <Link to="/listings" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <div className="relative">
-              <div className="w-12 h-12 bg-[#FFCC33] rounded-full flex items-center justify-center">
-                <div className="w-6 h-6 bg-white rounded-full"></div>
+              <div className="w-16 h-16 bg-umn-maroon rounded-full flex items-center justify-center">
+                <img src="/trans_gopher.png" alt="Goldy's Market Logo" className="w-full h-full" />
               </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#FFCC33] rounded-full animate-pulse"></div>
             </div>
             <div>
               <h1 className="text-2xl font-caveat font-bold text-[#7A0019] tracking-wide">Goldy's Market</h1>
@@ -82,7 +81,7 @@ function UniversalHeader() {
                   className="flex-1 px-4 py-3 bg-transparent focus:outline-none text-gray-700 placeholder-gray-400"
                 />
                 
-                <button className="px-6 py-3 bg-[#7A0019] text-white rounded-full hover:bg-[#7A0019]/90 transition-all duration-200 hover:scale-105 active:scale-95">
+                <button className="px-6 py-3 bg-[#7A0019] text-white rounded-full hover:bg-[#7A0019]/90 transition-all duration-200  active:scale-95">
                   <Search className="w-5 h-5" />
                 </button>
               </div>
@@ -222,7 +221,7 @@ function UniversalHeader() {
             </div>
             
             <Link to="/listings/add">
-              <button className="w-full bg-[#7A0019] text-white px-4 py-3 rounded-xl font-semibold flex items-center justify-center space-x-2">
+              <button className="bg-[#7A0019] text-white px-4 py-3 rounded-xl font-semibold flex items-center justify-center space-x-2">
                 <Plus className="w-5 h-5" />
                 <span>Sell Item</span>
               </button>
