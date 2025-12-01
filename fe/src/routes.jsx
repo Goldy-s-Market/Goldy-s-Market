@@ -7,6 +7,7 @@ import ListingsPage from "./pages/listings/ListingsPage";
 import IndividualListingPage from "./pages/listings/IndividualListingPage";
 import AddListingPage from "./pages/listings/AddListingPage";
 import GuestRoute from "./components/GuestRoute";
+import SavedPage from "./pages/saved_page/SavedPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const routes = [
@@ -48,6 +49,14 @@ const routes = [
         element: (
           <ProtectedRoute>
             <IndividualListingPage /> 
+          </ProtectedRoute>
+        )
+      },
+      { 
+        path: "saved", 
+        element: (
+          <ProtectedRoute>
+            <SavedPage /> 
           </ProtectedRoute>
         )
       },

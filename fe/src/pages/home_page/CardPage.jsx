@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Bookmark } from "lucide-react";
 
 
 /**
@@ -21,19 +22,73 @@ const ProductCard = ({
   vendorName, // Destructured the new prop
   id,
   onBuyNow,
+  sellerId,
 }) => {
+
+  const handleSaveItem = () => {
+    // TODO: Replace with backend API call to save item
+    // await savedAPI.saveItem(id);
+
+    // CURRENT: Using localStorage for development
+    const savedItems = JSON.parse(localStorage.getItem('savedItems')) || [];
+    const newItem = {
+      id,
+      name,
+      price,
+      imageUrl,
+      vendorName,
+      sellerId: sellerId || 'unknown-seller',
+    };
+
+    const isAlreadySaved = savedItems.find(item => item.id === id);
+    
+    if (!isAlreadySaved) {
+      savedItems.push(newItem);
+      localStorage.setItem('savedItems', JSON.stringify(savedItems));
+      alert('✅ Item saved successfully!');
+    } else {
+      // Remove from saved if already saved (toggle behavior)
+      const filteredItems = savedItems.filter(item => item.id !== id);
+      localStorage.setItem('savedItems', JSON.stringify(filteredItems));
+      alert('❌ Item removed from saved');
+    }
+  };
+
+  const isItemSaved = () => {
+    const savedItems = JSON.parse(localStorage.getItem('savedItems') || '[]');
+    return savedItems.some(item => item.id === id);
+  };
+
   return (
     // Card container is fixed-width on larger screens, full-width on mobile
     <div className="w-full sm:w-[300px] md:w-[300px] lg:w-[300px] max-w-[300px] flex-shrink-0 overflow-hidden bg-white rounded-4xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-[1.01] flex flex-col h-full min-h-[450px]">
 
       {/* Product Image */}
       <Link to={`/listings/${id}`} className="block">
-        <div className="relative h-48 overflow-hidden">
+        <div className="relative h-48 overflow-hidden group">
           <img
             className="object-cover w-full h-full"
             src={imageUrl || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxRPzNnDH8tN_lgEu93-jYUao6ARpfk7FSCw&s'}
             alt={name || 'Product'}
           />
+          
+          {/* Bookmark Button */}
+          <button
+            onClick={(e) => {
+              e.preventDefault(); // Prevent navigation to listing page
+              handleSaveItem();
+            }}
+            className={`absolute top-3 right-3 p-2.5 rounded-full shadow-lg transition-all duration-200 hover:scale-110 z-10 ${
+              isItemSaved() 
+                ? 'bg-[#7A0019] text-white' 
+                : 'bg-white/90 hover:bg-white text-gray-600'
+            }`}
+            title={isItemSaved() ? "Remove from saved" : "Save item"}
+          >
+            <Bookmark 
+              className={`w-5 h-5 ${isItemSaved() ? 'fill-current' : ''}`} 
+            />
+          </button>
         </div>
       </Link>
 

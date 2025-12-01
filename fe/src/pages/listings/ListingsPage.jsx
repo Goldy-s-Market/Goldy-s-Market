@@ -252,12 +252,11 @@ function ListingsPage() {
                   price={`$${listing.price}`}
                   vendorName={listing.category}
                   description={listing.description}
-                  onAddToCart={() => console.log('Add to cart:', listing.title)}
-                  onAddToWishlist={() => console.log('Add to wishlist:', listing.title)}
+                  sellerId={listing.sellerId || 'fake-seller-id'} //TODO: Replace with actual sellerId from backend
                   onBuyNow={() => console.log('Buy now:', listing.title)}
                 />
               ))}
-              </div>
+            </div>
           )}
         </div>
       </div>
