@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Search, Plus, MessageCircle, Bookmark, Bell, ChevronDown,Grid2X2,Book,Laptop,Shirt,Sofa,User,Package,Heart, Settings, LogOut, Menu} from 'lucide-react';
+import NotificationCard from './NotificationCard';
 
 function UniversalHeader() {
   const location = useLocation();
@@ -124,11 +125,7 @@ function UniversalHeader() {
                 </button>
               </Link>
 
-              <button className="relative p-3 text-gray-600 hover:text-[#7A0019] hover:bg-gray-100 rounded-full transition-all duration-200 hover:scale-110">
-                <Bell className="w-5 h-5" />
-                {/* TODO: Replace with actual notification count from backend */}
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 text-white text-xs rounded-full flex items-center justify-center font-bold">2</span>
-              </button>
+              <NotificationCard />
 
               {/* Profile Dropdown - ALWAYS VISIBLE */}
               <div className="relative">
